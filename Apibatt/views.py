@@ -1,11 +1,12 @@
 from datetime import datetime
 
 from django.contrib.auth.models import User, Group
+from django.http import HttpResponse
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from Apibatt.serializers import UserSerializer, GroupSerializer
+from Apibatt.serializers import UserSerializer, GroupSerializer, UserCustomSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -22,6 +23,16 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
+@api_view(['GET'])
+def UserCustom(request, pk):
+    try:
+        user = User.objects.get(pk=pk)
+    except User.DoesNotExist:
+        return HttpResponse(status=404)
+
+    serializer = UserCustomSerializer(user, context={'request': request})
+    return Response(serializer.data)
 
 
 @api_view(['GET'])

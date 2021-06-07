@@ -13,5 +13,6 @@ router.register(r'groups', views.GroupViewSet)
 # Additionally, we include the login URLs for the browsable API.
 urlpatterns = [
     url(r'^', include(router.urls)),
+    path('users/<int:pk>/permissions', views.UserCustom),
     path('test/test1', views.test),
 ]
